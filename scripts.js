@@ -1,6 +1,6 @@
 function testResults(unit, isPassed) {
 	var result = document.createElement('p');
-	result.innerHTML = 'Ex:' + unit + (isPassed ? ' passed' : 'failed') + '\n';
+	result.innerHTML = 'Ex:' + unit + (isPassed ? ' passed' : 'failed');
 	document.body.appendChild(result);
 }
 
@@ -252,3 +252,22 @@ var case17 = (expect(ele()).toBe('a') &&
 		expect(ele()).toBe('c') &&
 		expect(ele()).toBe('d'));
 testResults('17', case17);
+
+
+// Ex 18
+function collect(gen, arr) {
+	return function () {
+		var res = gen();
+		if (res !== undefined) {
+			arr.push(res);
+			return res;
+		}
+	}
+}
+var array = [],
+	col = collect(fromTo(0, 2), array);
+var case18 = (expect(col()).toBe(0) &&
+	expect(col()).toBe(1) &&
+	expect(col()).toBe(undefined) &&
+	expect(array).toEqual([0, 1]));
+testResults('18', case18);

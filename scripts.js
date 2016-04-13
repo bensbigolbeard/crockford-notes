@@ -260,8 +260,8 @@ function collect(gen, arr) {
 		var res = gen();
 		if (res !== undefined) {
 			arr.push(res);
-			return res;
 		}
+		return res;
 	}
 }
 var array = [],
@@ -271,3 +271,88 @@ var case18 = (expect(col()).toBe(0) &&
 	expect(col()).toBe(undefined) &&
 	expect(array).toEqual([0, 1]));
 testResults('18', case18);
+
+
+// Ex 19
+function filter(gen, func) {
+	return function recur() {
+		var val = gen();
+		if (val === undefined || func(val)) {
+			return val;
+		} else {
+			return recur();
+		}
+	}
+}
+var fil = filter(fromTo(0, 5), function third(value) {
+	return (value % 3) === 0;
+});
+var case19 = (expect(fil()).toBe(0) &&
+		expect(fil()).toBe(3));
+testResults('19', case19);
+
+
+// Ex 20
+function concat(gen1, gen2) {
+	return function () {
+		var val = gen1();
+			val = val !== undefined ? val : gen2();
+
+		if (val !== undefined) {
+			return val;
+		}
+	}
+}
+var con = concat(fromTo(0, 3), fromTo(0, 2));
+var case20 = (
+		expect(con()).toBe(0) &&
+		expect(con()).toBe(1) &&
+		expect(con()).toBe(2) &&
+		expect(con()).toBe(0) &&
+		expect(con()).toBe(1) &&
+		expect(con()).toBe(undefined));
+testResults('20', case20);
+
+
+// Ex 21
+function gensymf(series) {
+	var val = from(1);
+	return function () {
+		return series + val();
+	}
+}
+var geng = gensymf("G");
+var genh = gensymf("H");
+var case21 = (expect(geng()).toBe('G1') &&
+		expect(genh()).toBe('H1') &&
+		expect(geng()).toBe('G2') &&
+		expect(genh()).toBe('H2'));
+testResults('21', case21);
+
+
+// Ex 22
+function fibonaccif(x, y) {
+	var current,
+		next,
+		temp;
+	return function () {
+		if (current === undefined) {
+			current = x;
+			next = y;
+		} else {
+			temp = current + next;
+			current = next;
+			next = temp;
+		}
+		return current
+	}
+}
+var fib = fibonaccif(0, 1);
+var case22 = (expect(fib()).toBe(0) &&
+		expect(fib()).toBe(1) &&
+		expect(fib()).toBe(1) &&
+		expect(fib()).toBe(2) &&
+		expect(fib()).toBe(3) &&
+		expect(fib()).toBe(5));
+testResults('22', case22);
+

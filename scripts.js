@@ -79,3 +79,11 @@ expect(liftf(mul)(3)(4)).toBe(12);
 
 
 // Ex 7
+var inc1 = curry(add, 1),
+	inc2 = curryr(add, 1),
+	inc3 = liftf(add)(1),
+	inc4 = addf(1);
+expect(inc1(3)).toBe(4);
+expect(inc2(3)).toBe(4);
+expect(inc3(3)).toBe(4);
+expect(inc4(3)).toBe(4);

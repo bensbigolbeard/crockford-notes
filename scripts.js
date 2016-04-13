@@ -45,3 +45,17 @@ expect(curry).withArgs(sub, 3).toBeA(Function);
 expect(curry(sub, 3)(4)).toBe(-1);
 expect(curry).withArgs(mul, 3).toBeA(Function);
 expect(curry(mul, 3)(4)).toBe(12);
+
+
+// Ex 5
+function curryr(func, y) {
+	return function (x) {
+		return func(x, y);
+	}
+}
+expect(curryr).withArgs(add, 3).toBeA(Function);
+expect(curryr(add, 3)(4)).toBe(7);
+expect(curryr).withArgs(sub, 3).toBeA(Function);
+expect(curryr(sub, 3)(4)).toBe(1);
+expect(curryr).withArgs(mul, 3).toBeA(Function);
+expect(curryr(mul, 3)(4)).toBe(12);

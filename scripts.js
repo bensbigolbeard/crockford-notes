@@ -356,3 +356,23 @@ var case22 = (expect(fib()).toBe(0) &&
 		expect(fib()).toBe(5));
 testResults('22', case22);
 
+
+// Ex 23
+function counter(start) {
+	return {
+		up: function () {
+			return start += 1;
+		},
+		down: function () {
+			return start -= 1;
+		}
+	}
+}
+var object = counter(10);
+var up = object.up;
+var down = object.down;
+var case23 = (expect(up()).toBe(11) &&
+		expect(down()).toBe(10) &&
+		expect(down()).toBe(9) &&
+		expect(up()).toBe(10));
+testResults('23', case23);

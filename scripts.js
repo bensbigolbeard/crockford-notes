@@ -1,6 +1,6 @@
-function testResults(unit, isPassed) {
+function testResults(unit) {
 	var result = document.createElement('p');
-	result.innerHTML = 'Ex:' + unit + (isPassed ? ' passed' : 'failed');
+	result.innerHTML = 'Ex:' + unit + ' passed';
 	document.body.appendChild(result);
 }
 
@@ -14,10 +14,10 @@ function sub(a, b) {
 function mul(a, b) {
 	return a * b;
 }
-var case1 = (expect(add(1,2)).toBe(3) &&
-		expect(sub(1,2)).toBe(-1) &&
-		expect(mul(2,2)).toBe(4));
-testResults('1', case1);
+expect(add(1,2)).toBe(3);
+expect(sub(1,2)).toBe(-1);
+expect(mul(2,2)).toBe(4);
+testResults('1');
 
 
 // Ex 2
@@ -26,9 +26,9 @@ function identityf(x) {
 		return x;
 	}
 }
-var case2 = (expect(identityf).withArgs(3).toBeA(Function) &&
-		expect(identityf(3)()).toBe(3));
-testResults('2', case2);
+expect(identityf).withArgs(3).toBeA(Function);
+expect(identityf(3)()).toBe(3);
+testResults('2');
 
 
 // Ex 3
@@ -37,9 +37,9 @@ function addf(x) {
 		return x + y;
 	}
 }
-var case3 = (expect(addf).withArgs(3).toBeA(Function) &&
-		expect(addf(3)(4)).toBe(7));
-testResults('3', case3);
+expect(addf).withArgs(3).toBeA(Function);
+expect(addf(3)(4)).toBe(7);
+testResults('3');
 
 
 // Ex 4
@@ -304,14 +304,13 @@ function concat(gen1, gen2) {
 	}
 }
 var con = concat(fromTo(0, 3), fromTo(0, 2));
-var case20 = (
-		expect(con()).toBe(0) &&
-		expect(con()).toBe(1) &&
-		expect(con()).toBe(2) &&
-		expect(con()).toBe(0) &&
-		expect(con()).toBe(1) &&
-		expect(con()).toBe(undefined));
-testResults('20', case20);
+expect(con()).toBe(0);
+expect(con()).toBe(1);
+expect(con()).toBe(2);
+expect(con()).toBe(0);
+expect(con()).toBe(1);
+expect(con()).toBe(undefined);
+testResults('20');
 
 
 // Ex 21
@@ -323,11 +322,11 @@ function gensymf(series) {
 }
 var geng = gensymf("G");
 var genh = gensymf("H");
-var case21 = (expect(geng()).toBe('G1') &&
-		expect(genh()).toBe('H1') &&
-		expect(geng()).toBe('G2') &&
-		expect(genh()).toBe('H2'));
-testResults('21', case21);
+expect(geng()).toBe('G1');
+expect(genh()).toBe('H1');
+expect(geng()).toBe('G2');
+expect(genh()).toBe('H2');
+testResults('21');
 
 
 // Ex 22
@@ -348,13 +347,13 @@ function fibonaccif(x, y) {
 	}
 }
 var fib = fibonaccif(0, 1);
-var case22 = (expect(fib()).toBe(0) &&
-		expect(fib()).toBe(1) &&
-		expect(fib()).toBe(1) &&
-		expect(fib()).toBe(2) &&
-		expect(fib()).toBe(3) &&
-		expect(fib()).toBe(5));
-testResults('22', case22);
+expect(fib()).toBe(0);
+expect(fib()).toBe(1);
+expect(fib()).toBe(1);
+expect(fib()).toBe(2);
+expect(fib()).toBe(3);
+expect(fib()).toBe(5);
+testResults('22');
 
 
 // Ex 23
@@ -371,8 +370,101 @@ function counter(start) {
 var object = counter(10);
 var up = object.up;
 var down = object.down;
-var case23 = (expect(up()).toBe(11) &&
-		expect(down()).toBe(10) &&
-		expect(down()).toBe(9) &&
-		expect(up()).toBe(10));
-testResults('23', case23);
+expect(up()).toBe(11);
+expect(down()).toBe(10);
+expect(down()).toBe(9);
+expect(up()).toBe(10);
+testResults('23');
+
+
+// Ex 24
+function revocable(func) {
+	var revoked = false;
+	return {
+		invoke: function (x, y) {
+			return !revoked ? func(x, y) : undefined;
+		},
+		revoke: function () {
+			revoked = true;
+		}
+	}
+}
+var rev = revocable(add);
+var add_rev = rev.invoke;
+expect(add_rev(3, 4)).toBe(7);
+rev.revoke();
+expect(add_rev(5, 7)).toBe(undefined);
+testResults('24');
+
+
+// Ex 25
+function m(value, source) {
+	return {
+		value: value,
+		source: (typeof source === 'string') ?
+			source :
+			String(value)
+	}
+}
+
+
+function addm(m1, m2) {
+	return m(
+		m1.value + m2.value,
+		'(' + m1.source + '+' + m2.source + ')'
+	)
+}
+expect(addm(m(3), m(4))).toEqual({value:7,source:'(3+4)'});
+expect(addm(m(1), m(Math.PI, 'pi'))).toEqual({value:4.141592653589793,source:'(1+pi)'});
+testResults('25');
+
+
+// Ex 26
+function liftm(func, str) {
+	return function (x, y) {
+		return m(
+			func(x.value, y.value),
+			'(' + x.source + str + y.source + ')'
+		)
+	}
+}
+var addm = liftm(add, "+");
+var mulm = liftm(mul, "*");
+expect(addm(m(3), m(4))).toEqual({value:7, source:'(3+4)'});
+expect(mulm(m(3), m(4))).toEqual({value:12, source:'(3*4)'});
+testResults('26');
+
+
+// Ex 27
+function liftm2(func, str) {
+	return function (x, y) {
+		x = (typeof x === 'number') ? m(x) : x;
+		y = (typeof y === 'number') ? m(y) : y;
+		return m(
+			func(x.value, y.value),
+			'(' + x.source + str + y.source + ')'
+		)
+	}
+}
+var addm = liftm2(add, '+');
+expect(addm(m(3), m(4))).toEqual({value:7, source:'(3+4)'});
+expect(addm(3, m(4))).toEqual({value:7, source:'(3+4)'});
+expect(addm(m(3), 4)).toEqual({value:7, source:'(3+4)'});
+testResults('27');
+
+// write a function addg that adds from many invocation, until it sees an empty invocation
+function addg(num) {
+	var val = num;
+	return (num === undefined) ? undefined :
+		function helper(nextNum) {
+			if (nextNum === undefined) {
+				return val;
+			}
+			val += nextNum;
+			return helper;
+		};
+}
+expect(addg()).toBe(undefined);
+expect(addg(2)(3)()).toBe(5);
+expect(addg(2)(3)(4)()).toBe(9);
+testResults('28');

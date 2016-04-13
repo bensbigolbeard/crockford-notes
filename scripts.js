@@ -126,3 +126,31 @@ function composeu(func1, func2) {
 }
 expect(composeu(doubl, square)).toBeA(Function);
 expect(composeu(doubl, square)(5)).toBe(100);
+
+
+// Ex 10
+function composeb(func1, func2) {
+	return function (x, y, z) {
+		return func2(func1(x, y), z);
+	}
+}
+expect(composeu(add, mul)).toBeA(Function);
+expect(composeb(add, mul)(2, 3, 7)).toBe(35);
+
+
+// Ex 11
+function limit(func, x) {
+	return function(y, z) {
+		if (x > 0) {
+			x -= 1;
+			return func(y, z);
+		}
+	}
+}
+var add_ltd = limit(add, 1),
+	add_ltd2 = limit(add, 2);
+expect(add_ltd(3, 4)).toBe(7);
+expect(add_ltd(3, 4)).toBe(undefined);
+expect(add_ltd2(3, 4)).toBe(7);
+expect(add_ltd2(3, 4)).toBe(7);
+expect(add_ltd2(3, 4)).toBe(undefined);

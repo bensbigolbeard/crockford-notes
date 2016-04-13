@@ -103,3 +103,16 @@ expect(doubl).toBeA(Function);
 expect(doubl(11)).toBe(22);
 expect(square).toBeA(Function);
 expect(square(11)).toBe(121);
+
+
+// Ex 8
+function reverse(func) {
+	return function (x, y) {
+		return func(y, x);
+		// return liftf(func)(y)(x);
+		// return curry(func, y)(x);
+	}
+}
+var bus = reverse(sub);
+expect(bus).toBeA(Function);
+expect(bus(3, 2)).toBe(-1);

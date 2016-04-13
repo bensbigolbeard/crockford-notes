@@ -116,3 +116,13 @@ function reverse(func) {
 var bus = reverse(sub);
 expect(bus).toBeA(Function);
 expect(bus(3, 2)).toBe(-1);
+
+
+// Ex 9
+function composeu(func1, func2) {
+	return function(x) {
+		return func2(func1(x));
+	}
+}
+expect(composeu(doubl, square)).toBeA(Function);
+expect(composeu(doubl, square)(5)).toBe(100);

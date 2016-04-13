@@ -89,3 +89,17 @@ expect(inc2(3)).toBe(4);
 expect(inc3(3)).toBe(4);
 expect(inc4(3)).toBe(4);
 expect(inc5(3)).toBe(4);
+
+
+// Ex 8
+function twice(func) {
+	return function (x) {
+		return func(x, x);
+	}
+}
+var doubl = twice(add),
+	square = twice(mul);
+expect(doubl).toBeA(Function);
+expect(doubl(11)).toBe(22);
+expect(square).toBeA(Function);
+expect(square(11)).toBe(121);

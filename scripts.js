@@ -59,3 +59,22 @@ expect(curryr).withArgs(sub, 3).toBeA(Function);
 expect(curryr(sub, 3)(4)).toBe(1);
 expect(curryr).withArgs(mul, 3).toBeA(Function);
 expect(curryr(mul, 3)(4)).toBe(12);
+
+
+// Ex 6
+function liftf(func) {
+	return function (x) {
+		return function (y) {
+			return func(x, y)
+		}
+	}
+}
+expect(liftf).withArgs(add).toBeA(Function);
+expect(liftf(add)).withArgs(3).toBeA(Function);
+expect(liftf(add)(3)(4)).toBe(7);
+expect(liftf).withArgs(sub).toBeA(Function);
+expect(liftf(sub)).withArgs(3).toBeA(Function);
+expect(liftf(sub)(3)(4)).toBe(-1);
+expect(liftf).withArgs(mul).toBeA(Function);
+expect(liftf(mul)).withArgs(3).toBeA(Function);
+expect(liftf(mul)(3)(4)).toBe(12);

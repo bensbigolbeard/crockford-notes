@@ -3,26 +3,6 @@
 <head>
 </head>
 <body>
-<script src="https://npmcdn.com/expect/umd/expect.min.js"></script>
-	<script>
-		function add(a, b) {
-			return a + b;
-		}
-		function sub(a, b) {
-			return a - b;
-		}
-		function mul(a, b) {
-			return a * b;
-		}
-		expect(add(1,2)).toBe(3);
-		expect(sub(1,2)).toBe(-1);
-		expect(mul(2,2)).toBe(4);
-
-		function identityf(arg) {
-			return function () {
-				return arg;
-			}
-		}
-		expect(identityf(3)()).toBe(3);
-	</script>
+	<script src="https://npmcdn.com/expect/umd/expect.min.js"></script>
+	<script src="scripts.js"></script>
 </body>

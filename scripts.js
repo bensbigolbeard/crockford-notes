@@ -64,9 +64,7 @@ expect(curryr(mul, 3)(4)).toBe(12);
 // Ex 6
 function liftf(func) {
 	return function (x) {
-		return function (y) {
-			return func(x, y)
-		}
+		return curry(func, x)
 	}
 }
 expect(liftf).withArgs(add).toBeA(Function);
@@ -78,3 +76,6 @@ expect(liftf(sub)(3)(4)).toBe(-1);
 expect(liftf).withArgs(mul).toBeA(Function);
 expect(liftf(mul)).withArgs(3).toBeA(Function);
 expect(liftf(mul)(3)(4)).toBe(12);
+
+
+// Ex 7

@@ -452,7 +452,7 @@ expect(addm(3, m(4))).toEqual({value:7, source:'(3+4)'});
 expect(addm(m(3), 4)).toEqual({value:7, source:'(3+4)'});
 testResults('27');
 
-// write a function addg that adds from many invocation, until it sees an empty invocation
+// Ex 28
 function addg(num) {
 	var val = num;
 	return (num === undefined) ? undefined :
@@ -468,3 +468,57 @@ expect(addg()).toBe(undefined);
 expect(addg(2)(3)()).toBe(5);
 expect(addg(2)(3)(4)()).toBe(9);
 testResults('28');
+
+
+// Ex 29
+function liftg(func) {
+	var val;
+	if (func !== undefined) {
+		return function helper(nextNum) {
+			if (nextNum === undefined) {
+				return val;
+			}
+			if (val === undefined) {
+				val = nextNum;
+			} else {
+				val = func(val, nextNum);
+			}
+			return helper;
+		};
+	}
+}
+expect(liftg(mul)()).toBe(undefined);
+expect(liftg(mul)(3)()).toBe(3);
+expect(liftg(mul)(3)(0)(4)()).toBe(0);
+expect(liftg(mul)(1)(2)(4)(8)()).toBe(64);
+testResults('29');
+
+
+// Ex 30
+function arrayg(num) {
+	var val = num !== undefined ? [num] : [];
+	if (val.length > 0) {
+		return function helper(nextNum) {
+			if (nextNum === undefined) {
+				return val;
+			}
+			val = val.concat(nextNum);
+			return helper;
+		};
+	}
+	return val;
+}
+expect(arrayg()).toEqual([]);
+expect(arrayg(3)()).toEqual([3]);
+expect(arrayg(3)(4)(5)()).toEqual([3, 4, 5]);
+testResults('30');
+
+
+// Ex 31
+function continuize(func1) {
+	return function (func2, num) {
+		return func2(func1(num));
+	}
+}
+var sqrtc = continuize(Math.sqrt);
+sqrtc(alert, 81);
